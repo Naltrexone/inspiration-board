@@ -1,0 +1,23 @@
+exports[`Card That it matches an existing snapshot 1`] = `
+<section
+  className="card"
+>
+  <div
+    className="card__content"
+  >
+    <p
+      className="card__content-text"
+    >
+      test message
+      <span
+        className="card__content-emoji"
+      />
+    </p>
+    <button
+      onClick={[Function]}
+    >
+      delete
+    </button>
+  </div>
+</section>
+`;
