@@ -1,40 +1,37 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import emoji from 'emoji-dictionary';
+
 import './Card.css';
 
+const Card = (props) => {
 
-class Card extends Component {
-  static propTypes = {
-    id: PropTypes.number.isRequired,
-    text: PropTypes.string.isRequired,
-    emoji: PropTypes.string,
-    removeCardCallback: PropTypes.func.isRequired
-  };
+  console.log(typeof props.deleteCard);
 
-  removeThisCard = () => {
-    this.props.removeCardCallback(this.props.id);
-  };
+  const {text, emoji } =  props.card;
 
-  render() {
+  return(
+    <div className="card">
 
-
-    let emojiSymbol = '';
-    if (this.props.emoji != null) {
-      emojiSymbol = emoji.getUnicode(this.props.emoji);
-    }
-    return (
-      <section className="card">
-        <div className="card__content">
-          <p className="card__content-text">
-          { this.props.text }
-          <span className="card__content-emoji">{ emojiSymbol }</span>
-          </p>
-          <button onClick={ this.removeThisCard } >delete</button>
+      <div className="card__content">
+        <div className="card__content-emoji">
+          {emoji}
         </div>
-      </section>
-    )
-  }
-}
+        <div className="card__content-text">
+          {text}
+        </div>
+        <button
+          className="card__delete"
+          onClick={props.deleteCard}>
+          Delete
+        </button>
+      </div>
+    </div>
+  );
+};
+
+Card.propTypes = {
+  card: PropTypes.object.isRequired,
+  deleteCard: PropTypes.func.isRequired
+};
 
 export default Card;
