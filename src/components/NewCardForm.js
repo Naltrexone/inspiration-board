@@ -6,70 +6,100 @@ import './NewCardForm.css';
 const EMOJI_LIST = ["", "heart_eyes", "beer", "clap", "sparkling_heart", "heart_eyes_cat", "dog"]
 
 class NewCardForm extends Component {
-  static propTypes = {
-    addCardCallback: PropTypes.func.isRequired,
-  };
 
-  constructor() {
-    super();
-    this.state = {
+  constructor(props) {
+    super(props);
+
+    const baseState = {
       text: '',
-      emoji: ''
+      emoji: '',
+      errorMessages: []
     };
+
+    this.state = {...baseState};
+    this.baseState = {...baseState};
   }
 
-  onInputChange = (event) => {
-    let newState = {};
-    newState[event.target.name] = event.target.value;
+  onInputChange = (e) => {
+    const { name, value } = e.target;
+
+    const newState = {};
+    newState[name] = value;
     this.setState(newState);
   }
 
-  onFormSubmit = (event) => {
-    event.preventDefault();
-    this.props.addCardCallback(this.state);
+  onFormSubmit = (e) => {
+    e.preventDefault();
+
+    if (this.state.text === '') {
+      this.setState({ errorMessages: [...this.state.errorMessages, "text cannot be blank"]});
+      return;
+    }
+
+    const newCard = {...this.state};
+    this.setState(this.baseState);
+    this.props.addCard(newCard);
+
     this.setState({
-      text: '',
-      emoji: ''
+      errorMessages: []
     });
   }
 
-  render() {
-    const emoji_options = EMOJI_LIST.map((emojiCode, index) => {
-      return <option key={index} value={emojiCode} >
-        { emoji.getUnicode(emojiCode) }
-      </option>;
+
+  render () {
+
+    const emojiList = EMOJI_LIST.map((emojiText, i) => {
+
+      const emojiCode = emoji.getUnicode(emojiText);
+
+      return (<option value = {emojiCode} key = {i}>{emojiCode}</option>)
     });
-    return (
-      <form className="new-card-form new-card-form__form" onSubmit={this.onFormSubmit}>
-      <h3 className="new-card-form__header">Add a new inspirational note to this board.</h3>
-        <div>
-          <label htmlFor="text"
-          className="new-card-form__form-label" >Message</label>
-          <textarea
-            type="text"
-            name="text"
-            value={this.state.text}
-            onChange={ this.onInputChange }
-            className="new-card-form__form-textarea"
-            ></textarea>
-        </div>
-        <div>
-          <label htmlFor="emoji" className="new-card-form__form-label">Emoji (optional)</label>
-          <select
-            name="emoji"
-            value={this.state.emoji}
-            onChange={ this.onInputChange }
-            className="new-card-form__form-select"
+
+    const errorMessages = this.state.errorMessages.map((message, i) => {
+      return <li key={i}>{message}</li>;
+      });
+
+    return(
+      <div className="new-card-form">
+        <section className="new-card-form__header">
+          New Card Form
+          <ul>
+            {errorMessages}
+          </ul>
+        </section>
+
+        <form
+          onSubmit={this.onFormSubmit}
           >
-            { emoji_options }
-          </select>
-        </div>
-        <div>
-          <input type="submit" className="new-card-form__form-button" />
-        </div>
-      </form>
-    );
+          <div className="new-card-form__form">
+            <label htmlFor="text" className="new-card-form__form-label">Text:</label>
+            <textarea
+              name="text"
+              value={this.state.text}
+              onChange={this.onInputChange}
+              className="new-card-form__form-textarea"
+              />
+          </div>
+          <div className="new-card-form__form">
+            <label htmlFor="emoji" className="new-card-form__form-label">Emoji:</label>
+            <select name="emoji" value={this.state.emoji} onChange={this.onInputChange}
+              className="new-card-form__form-select">
+              {emojiList}
+            </select>
+          </div>
+          <input
+            type="submit"
+            value="Add Card"
+            className="new-card-form__form-button"
+            />
+        </form>
+      </div>
+    )
   }
 }
+
+NewCardForm.propTypes = {
+  addCard: PropTypes.func,
+};
 
 export default NewCardForm;
