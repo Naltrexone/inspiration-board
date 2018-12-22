@@ -6,114 +6,102 @@ import './Board.css';
 import Card from './Card';
 import NewCardForm from './NewCardForm';
 
-
 class Board extends Component {
-  static propTypes = {
-    url: PropTypes.string.isRequired,
-    boardName: PropTypes.string.isRequired,
-    updateStatusCallback: PropTypes.func.isRequired
-  };
-
-  constructor(props) {
+  constructor() {
     super();
+
     this.state = {
-      boardName: props.boardName,
-      cards: []
+      cards: [],
+      errorMessages: []
     };
   }
 
-  getBoardData = (boardName) => {
-    this.props.updateStatusCallback(`Loading cards for ${this.props.boardName}`, 'success');
-    const BOARD_URL = `${this.props.url + boardName}/cards`;
+  componentDidMount() {
 
-    axios.get(BOARD_URL)
+    const GET_ALL_CARDS_URL = `https://inspiration-board.herokuapp.com/boards/${this.props.boardName}/cards`;
+
+    axios.get(GET_ALL_CARDS_URL)
     .then((response) => {
-      this.props.updateStatusCallback(`Successfully loaded cards for ${boardName}`, 'success');
-      const cardData = response.data.slice(0, 100);
+      this.setState({ cards: response.data });
+    })
+    .catch((error) => {
       this.setState({
-        cards: cardData
+        errorMessages: [...this.state.errorMessages, error.message]
+      });
+    });
+  }
+
+  addCard = (cardData) => {
+
+    const ADD_CARD_URL = `https://inspiration-board.herokuapp.com/boards/${this.props.boardName}/cards`;
+
+    axios.post(ADD_CARD_URL, cardData)
+    .then((response) => {
+      this.setState({
+        cards: [ ...this.state.cards, response.data]
       });
     })
     .catch((error) => {
-      this.props.updateStatusCallback(`There was a problem loading cards: ${error.message}`, 'error');
-    })
-  }
-
-  componentDidMount() {
-    this.getBoardData(this.props.boardName);
-  }
-
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.boardName !== this.state.boardName) {
       this.setState({
-        boardName: nextProps.boardName
+        errorMessages: [...this.state.errorMessages, error.message]
       });
-      this.getBoardData(nextProps.boardName);
-    }
+    });
   }
 
-  addCard = (newCard) => {
-    this.props.updateStatusCallback(`Creating new card`, 'success');
+  deleteCard = (id) => {
+    const DELETE_CARD_URL = `https://inspiration-board.herokuapp.com/cards/${id}`;
 
-    const BOARD_URL = `${this.props.url + this.props.boardName}/cards`;
+    axios.delete(DELETE_CARD_URL)
+    .then(() => {
+      const updatedCardList = [...this.state.cards];
+      const index = updatedCardList.findIndex(card => card.id === id);
+      updatedCardList.splice(index, 1);
 
-
-    axios.post(BOARD_URL, newCard)
-      .then((response) => {
-        this.props.updateStatusCallback(`New card created!`, 'success');
-        const updatedCards = this.state.cards;
-        updatedCards.unshift({
-          card: response.data.card
-        });
-        this.setState({
-          cards: updatedCards
-        });
-      })
-      .catch((error) => {
-        this.props.updateStatusCallback(`Something went wrong trying to create a new card: ${error.message}`, 'error');
-      });
-  }
-
-  removeCard = (id) => {
-    const DELETE_URL = `${this.props.url + this.props.boardName}/cards/${id}`;
-    this.props.updateStatusCallback(`Removing card ${id}`, 'success');
-
-    axios.delete(DELETE_URL)
-      .then(() => {
-        this.props.updateStatusCallback(`Successfully removed card ${id}`, 'success');
-        const updatedCards = this.state.cards.filter((cardInfo) => {
-          if (cardInfo.card.id !== id) {
-            return cardInfo
-          }
-        });
-        this.setState({
-          cards: updatedCards
-        });
-      })
-      .catch((error) => {
-        this.props.updateStatusCallback(`Encountered an error trying to remove card ${id}: ${error.message}`, 'error');
-      });
+      this.setState({ cards: updatedCardList });
+    })
+    .catch((error) => {
+      this.setState({ errorMessages: [...this.state.errorMessages, error.message] });
+    });
   }
 
   render() {
-    const cards = this.state.cards.map((cardInfo) => {
-      return <Card
-        key={cardInfo.card.id}
-        boardName={this.props.boardName}
-        id={cardInfo.card.id}
-        text={cardInfo.card.text}
-        emoji={cardInfo.card.emoji}
-        removeCardCallback={ this.removeCard }
-      />
+
+    const cardList = this.state.cards.map((card, i) => {
+
+      const { id, text, emoji } = card.card;
+
+      const formattedCard = {
+        id: id,
+        text: text,
+        emoji: emoji
+      };
+
+      return <Card key={i}
+        card={formattedCard}
+        deleteCard={() => this.deleteCard(id)} />
     });
+
+    const errorMessages = this.state.errorMessages.map((message, i) => {
+      return <li key={i}>{message}</li>;
+      });
+
     return (
-      <section className="board">
-      <NewCardForm addCardCallback={ this.addCard } />
-        { cards }
-      </section>
+      <div className="board">
+        <section className="validation-errors-display">
+          <ul className="validation-errors-display__list">
+            {errorMessages}
+          </ul>
+        </section>
+        {cardList}
+        <NewCardForm addCard={this.addCard} />
+      </div>
     )
   }
-
 }
+
+Board.propTypes = {
+  url: PropTypes.string.isRequired,
+  boardName: PropTypes.string.isRequired
+};
 
 export default Board;
