@@ -1,0 +1,229 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Card that it matches an existing snapshot 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Card
+    card={
+        Object {
+            "id": 99,
+            "text": "be happy!",
+          }
+    }
+    deleteCard={[Function]}
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": <div
+        className="card__content"
+>
+        <div
+                className="card__content-emoji"
+        />
+        <div
+                className="card__content-text"
+        >
+                be happy!
+        </div>
+        <button
+                className="card__delete"
+                onClick={[Function]}
+        >
+                Delete
+        </button>
+</div>,
+      "className": "card",
+    },
+    "ref": null,
+    "rendered": Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <div
+            className="card__content-emoji"
+/>,
+          <div
+            className="card__content-text"
+>
+            be happy!
+</div>,
+          <button
+            className="card__delete"
+            onClick={[Function]}
+>
+            Delete
+</button>,
+        ],
+        "className": "card__content",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": undefined,
+            "className": "card__content-emoji",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": "div",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": "be happy!",
+            "className": "card__content-text",
+          },
+          "ref": null,
+          "rendered": "be happy!",
+          "type": "div",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": "Delete",
+            "className": "card__delete",
+            "onClick": [Function],
+          },
+          "ref": null,
+          "rendered": "Delete",
+          "type": "button",
+        },
+      ],
+      "type": "div",
+    },
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": <div
+          className="card__content"
+>
+          <div
+                    className="card__content-emoji"
+          />
+          <div
+                    className="card__content-text"
+          >
+                    be happy!
+          </div>
+          <button
+                    className="card__delete"
+                    onClick={[Function]}
+          >
+                    Delete
+          </button>
+</div>,
+        "className": "card",
+      },
+      "ref": null,
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <div
+              className="card__content-emoji"
+/>,
+            <div
+              className="card__content-text"
+>
+              be happy!
+</div>,
+            <button
+              className="card__delete"
+              onClick={[Function]}
+>
+              Delete
+</button>,
+          ],
+          "className": "card__content",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": undefined,
+              "className": "card__content-emoji",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": "be happy!",
+              "className": "card__content-text",
+            },
+            "ref": null,
+            "rendered": "be happy!",
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": "Delete",
+              "className": "card__delete",
+              "onClick": [Function],
+            },
+            "ref": null,
+            "rendered": "Delete",
+            "type": "button",
+          },
+        ],
+        "type": "div",
+      },
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;
